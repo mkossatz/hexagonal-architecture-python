@@ -12,15 +12,17 @@ pytest-mock = "*"
 click = "*"
 pytest-dotenv = "*"
 autopep8 = "*"
+requests = "*"
 
 [packages]
-flask = "*"
 sqlalchemy = "*"
 inject = "*"
 dataclasses-json = "*"
 psycopg2 = "*"
 alembic = "*"
 hex = {editable = true,path = "."}
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
 
 [requires]
 python_version = "3.9"

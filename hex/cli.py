@@ -21,7 +21,7 @@ def cli() -> None:
 
 @cli.command(help='Run the web server')
 def server() -> int:
-    return subprocess.call(['flask', 'run'])
+    return subprocess.call(['uvicorn', 'hex.asgi:create_application', '--factory'])
 
 
 @cli.group(help="Manage the database")
@@ -47,7 +47,7 @@ def migrate(env: str) -> int:
     if env != 'dev':
         dotenv_file = f'.env.{env}'
 
-    load_dotenv(dotenv_file)
+    load_dotenv(dotenv_file, override=True)
 
     return subprocess.call(['alembic', 'upgrade', 'head'])
 

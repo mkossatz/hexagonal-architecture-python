@@ -4,7 +4,7 @@ from sqlalchemy import (
     create_engine, MetaData, Table, Column, Integer, Text, DateTime, func, select
 )
 
-from hex.domain.post import Post
+from hex.domain.post import Post, Timestamp
 from hex.domain.repositories.posts_repository import PostsRepositoryInterface
 
 metadata = MetaData()
@@ -31,7 +31,12 @@ class PostsRepository(PostsRepositoryInterface):
         row = cursor.fetchone()
         if not row:
             return None
-        return Post(**row)
+        print(Timestamp.from_datetime(row['updated_at']))
+        return Post(
+            row['id'], row['author_name'], row['title'], row['body'],
+            Timestamp.from_datetime(row['created_at']),
+            Timestamp.from_datetime(row['updated_at'])
+        )
 
     def search_posts(self, start_after: Optional[int] = None,
                      end_before: Optional[int] = None) -> List[Post]:
@@ -45,7 +50,11 @@ class PostsRepository(PostsRepositoryInterface):
 
         cursor = self.__connection.execute(query)
         rows = cursor.fetchall()
-        return [Post(**row) for row in rows]
+        return [Post(
+            row['id'], row['author_name'], row['title'], row['body'],
+            Timestamp.from_datetime(row['created_at']),
+            Timestamp.from_datetime(row['updated_at'])
+        ) for row in rows]
 
     def count_posts(self) -> int:
         query = select([func.count()]).select_from(posts)

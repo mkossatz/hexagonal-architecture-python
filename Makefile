@@ -11,3 +11,13 @@ migrate:
 # make sure to set the DATABASE_URI in the appropriate .env file(s)
 	hex db migrate
 	hex db migrate test
+
+
+clean:
+	rm -rf .DS_Store
+	rm -rf __pycache__/
+	rm -rf *.egg-info
+	rm -rf .idea/
+	rm -rf .vscode/
+	rm -rf .mypy_cache/
+	rm -rf .pytest_cache/

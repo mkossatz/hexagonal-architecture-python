@@ -3,7 +3,7 @@ from sqlalchemy import literal_column
 from sqlalchemy.engine import Connection
 
 from hex.adapters.database.postgres import posts, PostsRepository
-from hex.domain.post import Post
+from hex.domain.post import Post, Timestamp
 
 
 @pytest.fixture
@@ -18,8 +18,12 @@ def post(database_connection: Connection) -> Post:
                                    body='body'
                                    ).returning(literal_column('*'))
     cursor = database_connection.execute(insert)
-    result = cursor.fetchone()
-    return Post(**result)
+    row = cursor.fetchone()
+    return Post(
+        row['id'], row['author_name'], row['title'], row['body'],
+        Timestamp.from_datetime(row['created_at']),
+        Timestamp.from_datetime(row['updated_at'])
+    )
 
 
 class TestPostsRepository:

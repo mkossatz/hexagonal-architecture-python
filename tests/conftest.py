@@ -19,4 +19,6 @@ def database_connection(database_uri: str) -> Connection:
     connection = engine.connect()
     for table in metadata.sorted_tables:
         connection.execute(table.delete())
-    return connection
+    yield connection
+    print("\n\n\nCLOSING\n\n\n")
+    connection.close()
